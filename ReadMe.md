@@ -45,3 +45,36 @@
 - flush 모드를 설정할 수 있다.
     - FlushModeType.AUTO
     - FlushModeType.COMMIT
+    
+## 3일차 정리
+
+- `@Entity`가 붙은 클래스는 JPA가 관리한다.
+    - `reflection`을 사용하기 때문에 기본 생성자가 필수다.
+    - final, enum. interface, inner 클래스 등에는 사용 불가하다.
+    - attribute에 final을 사용할 수 없다
+- 클래스명과 테이블명을 `snake_case`로 지정해주지만 특정 이름으로 매핑하려면 `@Table`을 사용할 수 있다.
+- jpa에선 application loading 시점에 db 테이블을 생성할 수 있는 기능을 제공한다.
+    - real 환경에선 사용하지 않는 것이 좋다.
+    - 테이블 중심에서 객체 중심으로 
+    - 데이터베이스 벤더별 적절한 ddl을 생성해준다.
+    - hibernate.hbm2ddl.auto
+        - create : 기존 테이블 삭제후 재생성
+        - drop : 테이븡을 drop만 한다.
+        - create-drop : 종료 시점에 테이블 삭제
+        - update : 변경분만 반영, drop은 적용되지 않음
+        - validate : entity와 테이블이 정상적으로 매핑됐는지 여부만 확인
+        - none : 사용하지 않는다.
+- `column`을 이용하면 제약 조건 설정이 가능하다.
+- `@Transient`는 테이블과 매핑되지 않고 메모리상에서만 사용된다
+- `unique` 제약 조건은 이름이 random하게 작성되기 때문에 잘 사용하지 않는다.
+    - 보통은 `@Table` 에서 한다.
+- jpa는 기본 키 매핑 전략을 제공한다
+- @GeneratedValue는 자동생성 하게 해준다.
+    - IDENTITY: 데이터베이스에 위임 (MYSQL)
+    - SEQUENCE: 데이터베이스 시퀀스 또는 시리얼 사용(ORACLE)
+    - TABLE: 키 생성용 테이블을 별도로 생성
+    - AUTO: 벤더별 자동 지정
+- `id` 전략에 따라 jpa 작동 방식이 달라질 수 있다.
+    - auto_incremnet를 할 경우 `null` 로 설정해야 한다.
+    - 만약, id 를 auto_increment등으로 설정할 경우 데이터베이스에 값을 삽입하지 않는다면 id를 알수가 없다. 따라서 `persist()`호출 시 `commit()`을 하지 않고도 insert쿼리를 바로 수행한다.
+    

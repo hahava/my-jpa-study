@@ -21,8 +21,10 @@ public class Main {
         try {
             // insert
             Member member = new Member();
-            member.setId(1L);
+            member.setId(null);
+            member.setAge(3);
             member.setName("haha");
+
             entityManager.persist(member);
 
             // select
@@ -36,7 +38,7 @@ public class Main {
             member.setName("hahava");
 
             // delete
-            entityManager.remove(firstMember);
+//            entityManager.remove(firstMember);
 
             transaction.commit();
         } catch (Exception e) {
