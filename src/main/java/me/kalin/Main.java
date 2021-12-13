@@ -1,11 +1,14 @@
 package me.kalin;
 
 import me.kalin.entity.Member;
+import me.kalin.entity.Team;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import java.lang.reflect.Proxy;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
@@ -17,32 +20,28 @@ public class Main {
 
         transaction.begin();
 
-
         try {
-            // insert
-            Member member = new Member();
-            member.setId(null);
-            member.setAge(3);
-            member.setName("haha");
+            Team team = new Team();
+            team.setName("firstTeam");
+            // team.getMembers().add() // 이런건 안됨...
+            entityManager.persist(team);
 
+            Member member = new Member();
+            member.setUserName("firstMember");
+            member.setTeam(team);
+            // member.setTeamId(team.getId()); // 객체지향 관점으로는 매우 이상함 ...
             entityManager.persist(member);
 
-            // select
-            Member firstMember = entityManager.find(Member.class, 1L);
-            System.out.println(firstMember);
+            entityManager.flush();
+            entityManager.clear();
 
-            System.out.println(firstMember.equals(member));
-            System.out.println(firstMember == member);
+            Member findMember = entityManager.find(Member.class, member.getId());
+            List<Member> members = findMember.getTeam().getMembers();
 
-            // update
-            member.setName("hahava");
-
-            // delete
-//            entityManager.remove(firstMember);
+            members.stream().forEach(m -> System.out.println(m.getUserName()));
 
             transaction.commit();
         } catch (Exception e) {
-            e.printStackTrace();
             transaction.rollback();
         }
 

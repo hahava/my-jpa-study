@@ -1,29 +1,21 @@
 package me.kalin.entity;
 
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(unique = true, length = 20)
-    private String name;
-    private Integer age;
 
-    @CreationTimestamp
-    @Column(updatable = false)
-    private LocalDateTime createDateTime;
+    private String userName;
 
-    @UpdateTimestamp
-    private LocalDateTime modifyDateTime;
+//    @Column(name = "team_id")
+//    private Long teamId;
 
-    @Transient
-    private String description;
+   @ManyToOne
+   @JoinColumn(name = "team_id")
+    private Team team;
 
     public Long getId() {
         return id;
@@ -33,43 +25,28 @@ public class Member {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
-    public Integer getAge() {
-        return age;
+    public Team getTeam() {
+        return team;
     }
 
-    public void setAge(Integer age) {
-        this.age = age;
+    public void setTeam(Team team) {
+        this.team = team;
+        team.getMembers().add(this); // 연관관계 매핑이됨
     }
 
-    public LocalDateTime getCreateDateTime() {
-        return createDateTime;
-    }
+    //    public Long getTeamId() {
+//        return teamId;
+//    }
 
-    public void setCreateDateTime(LocalDateTime createDateTime) {
-        this.createDateTime = createDateTime;
-    }
-
-    public LocalDateTime getModifyDateTime() {
-        return modifyDateTime;
-    }
-
-    public void setModifyDateTime(LocalDateTime modifyDateTime) {
-        this.modifyDateTime = modifyDateTime;
-    }
-
-    @Override
-    public String toString() {
-        return "Member{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
-    }
+//    public void setTeamId(Long teamId) {
+//        this.teamId = teamId;
+//    }
 }
