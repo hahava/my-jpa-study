@@ -237,3 +237,15 @@
             - 오픈소스이며 Criteria 대용으로 많이 사용한다.
             - 빌더 패턴을 통해서 해결한다.   
         - 네이티브 SQL
+
+## 9일차 정리
+- getter/setter 는 사용하지 않는 것이 좋다
+    - getter 는 실무상 사용할 가능성이 높다.... setter 만 가능한 제한할것
+- `id`는 테이블 관점에서 조금 어색하다.
+    - 가능하면 `table_id` 가 관례상 편함
+- jpa 는 reflection을 사용하기에 기본 생성자가 반드시 필요하다
+    - `protected` 또는 `NoArgsConstructor`를 사용하자
+- @XToOne의 모든 연관관계는 lazy 로딩으로 설정한다.
+    - n+1 수시로 발생
+- 컬렉션은 필드에서 바로 초기화한다.
+    - NPE 방지 
